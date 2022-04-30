@@ -91,6 +91,14 @@ class Window():
     def clear_canvas(self):
         self.canvas.delete("all")
 
+    def render_points(self, points):
+        for point in points:
+            x = point[0]*(self.canvas.winfo_width() - 70) + 35
+            y = point[1]*(self.canvas.winfo_height() - 70) + 35
+            coord_ciutat = ((x, y), (x + 11*2, y + 11*2))
+            self.canvas.create_oval(coord_ciutat, width = 0, fill = "black", activefill="grey")
+
+
 
 global window
 
@@ -99,7 +107,9 @@ window = Window()
 @sio.on("start")
 def on_message(player1, player2, points):
     print(player1, player2)
+    print(points)
 
     window.clear_canvas()
+    window.render_points(points)
 
 window.start()
