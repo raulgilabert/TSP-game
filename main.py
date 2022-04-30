@@ -3,6 +3,7 @@ from tkinter import messagebox
 from PIL import Image, ImageTk
 import pygame
 import socketio
+import math
 
 global sio
 sio = socketio.Client()
@@ -10,7 +11,7 @@ sio = socketio.Client()
 class Connection:
     def __init__ (self, name):
         self.name = name
-        sio.connect('http://10.5.248.209:3000')
+        sio.connect('http://192.168.1.17:3000')
 
     def start(self):
         sio.emit("newPlayer", self.name)
@@ -22,6 +23,9 @@ def play(name):
     c = Connection(name)
     c.start()
 
+def obtain_center(coords):
+    return ((coords[0][0] + coords[1][0])/ 2, (coords[0][1] + coords[1][1])/2)
+
 
 class Window():
     def __init__(self):
@@ -32,6 +36,12 @@ class Window():
         self.root.grid_rowconfigure(4, weight=1)
         self.root.grid_rowconfigure(6, weight=1)
         self.root.title("TSP Game")
+        self.coords_points = []
+        self.centers = []
+        self.clicked_points = []
+        self.line_id_list = []
+        self.points = []
+
 
         for i in range(1, 8, 2):
             Label(self.root, text=" ").grid(row=1, column=0)
@@ -66,8 +76,8 @@ class Window():
         Label(self.root, text="    ").grid(row=8, column=0)
 
         self.canvas = Canvas(self.root, bg="white")
-        self.canvas.grid(row=1, column=1, columnspan=3, rowspan=8,
-                sticky="NSWE", padx=15, pady=15)
+        self.canvas.grid(row=1, column=1, columnspan=3, rowspan=8, sticky="NSWE", padx=15, pady=15)
+        self.canvas.bind("<Button-1>", self.link_points)
 
         #img = ImageTk.PhotoImage(Image.open("title.png"))
         #self.canvas.create_image(800, 440, anchor="center", image=img)
@@ -84,6 +94,13 @@ class Window():
         self.root.update()
         self.root.minsize(self.root.winfo_width(), self.root.winfo_height())
 
+    def obtain_center_index(self, index):
+        return obtain_center(self.coords_points[index])
+
+    def create_line(self, center1, center2):
+        actual_id = self.canvas.create_line(center1[0], center1[1], center2[0], center2[1])
+        self.canvas.tag_lower(actual_id)
+        self.line_id_list.append(actual_id)
 
     def start(self):
         self.root.mainloop()
@@ -92,13 +109,59 @@ class Window():
         self.canvas.delete("all")
 
     def render_points(self, points):
+        self.points = points
+
         for point in points:
             x = point[0]*(self.canvas.winfo_width() - 70) + 35
             y = point[1]*(self.canvas.winfo_height() - 70) + 35
-            coord_ciutat = ((x, y), (x + 11*2, y + 11*2))
-            self.canvas.create_oval(coord_ciutat, width = 0, fill = "black", activefill="grey")
+            coords = ((x, y), (x + 11*2, y + 11*2))
+            self.canvas.create_oval(coords, width = 0, fill = "black", activefill="grey")
+            self.coords_points.append(coords)
 
+        for i in self.coords_points:
+            self.centers.append(obtain_center(i))
 
+    def link_points(self, event):
+        point_index = -1
+
+        for i,c in enumerate(self.coords_points):
+            if event.x>c[0][0] and event.x<c[1][0] and event.y>c[0][1] and event.y<c[1][1]:
+                point_index = i
+                break
+        if point_index == -1:
+            return
+        actual_point = self.coords_points[point_index]
+
+        if not self.clicked_points:
+            self.canvas.create_oval(actual_point[0][0], actual_point[0][1], actual_point[1][0],
+                                    actual_point[1][1], width=3, outline="lime")
+        else:
+            if point_index == self.clicked_points[0] and len(self.clicked_points) < len(self.coords_points):
+                return
+            if point_index in self.clicked_points and self.clicked_points[0] != point_index:
+                return
+            if point_index == self.clicked_points[-1]:
+                return
+
+            last_center = self.obtain_center_index(self.clicked_points[-1])
+            actual_center = obtain_center(actual_point)
+
+            self.create_line(actual_center, last_center)
+        self.clicked_points.append(point_index)
+        
+        if (len(self.clicked_points) > len(self.points)):
+            last_point = self.points[self.clicked_points[0]]
+            
+            self.clicked_points.pop(0)
+
+            distance = 0
+
+            for i in self.clicked_points:
+                distance += math.sqrt((last_point[0] - self.clicked_points[i][0])**2 + (last_point[1] - self.clicked_points[i][1])**2)
+
+                last_point = self.clicked_points[i]
+
+            print(distance)
 
 global window
 
