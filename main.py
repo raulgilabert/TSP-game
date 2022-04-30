@@ -16,6 +16,8 @@ class Connection:
     def start(self):
         sio.emit("newPlayer", self.name)
 
+    def submit(self, dist):
+        sio.emit("ready", self.name, dist)
 
 global c
 
@@ -41,6 +43,7 @@ class Window():
         self.clicked_points = []
         self.line_id_list = []
         self.points = []
+        self.distance = 0.0
 
 
         for i in range(1, 8, 2):
@@ -84,8 +87,7 @@ class Window():
 
         self.canvas.create_text(800, 440, text="THE GAME")
 
-        check_button = Button(self.root, text="SUBMIT", cursor="hand2",
-                height=2, width=5)
+        check_button = Button(self.root, text="SUBMIT", cursor="hand2",height=2, width=5, command=lambda:c.submit(self.distance))
         check_button.grid(row=6, column=0)
 
         var = StringVar()
@@ -148,10 +150,9 @@ class Window():
 
             self.create_line(actual_center, last_center)
         self.clicked_points.append(point_index)
-        
+
         if (len(self.clicked_points) > len(self.points)):
             last_point = self.points[self.clicked_points[0]]
-            
             self.clicked_points.pop(0)
 
             distance = 0
@@ -161,8 +162,7 @@ class Window():
                 distance += math.sqrt((last_point[0] - self.points[self.clicked_points[i]][0])**2 + (last_point[1] - self.points[self.clicked_points[i]][1])**2)
 
                 last_point = self.points[self.clicked_points[i]]
-
-            print(distance)
+            self.distance = distance
 
 global window
 
