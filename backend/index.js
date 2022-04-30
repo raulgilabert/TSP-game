@@ -29,9 +29,14 @@ io.on("connection", (socket) => {
 	else {
 	    socket.join(matches.toString())
 	    rooms[matches.toString()].player2.name = arg
+    
+	    console.log("sending start")
 
-	    io.to(matches.toString()).emit("start", rooms[matches.toString()].player1.name, rooms[matches.toString()].player2.name)
+	    io.to(matches.toString()).emit("start", rooms[matches.toString()].player1.name, rooms[matches.toString()].player2.name, "")
+	    
+	    console.log("sending ended")
 	}
+	
 
 	console.log(arg)
 
