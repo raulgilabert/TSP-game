@@ -176,4 +176,8 @@ def on_message(player1, player2, points):
     window.clear_canvas()
     window.render_points(points)
 
+@sio.on("winner")
+def on_message(winner):
+    print(winner)
+
 window.start()
