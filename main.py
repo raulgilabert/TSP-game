@@ -262,7 +262,7 @@ class Window():
         else:
             self.texts.insert(END, data[1][0] + " WINS!")
 
-    def cleat_info(self):
+    def clear_info(self):
        self.texts.delete(0, END)
 
 global window
