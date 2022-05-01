@@ -72,8 +72,8 @@ class Window():
         frame_texts = Frame(self.root, height=35, padx=10, pady=10)
         frame_texts.grid(row=5, column=0)
 
-        texts = Listbox(frame_texts, height=35, width=30)
-        texts.pack()
+        self.texts = Listbox(frame_texts, height=35, width=30)
+        self.texts.pack()
 
         Label(self.root, text="    ").grid(row=8, column=0)
 
@@ -164,9 +164,9 @@ class Window():
             self.distance = distance
     def info_winners(self, winner):
         if winner == self.name.get():
-            texts.insert(END, "YOU WIN")
+            self.texts.insert(END, "YOU WIN")
         else:
-            texts.insert(END, "YOU LOSE")
+            self.texts.insert(END, "YOU LOSE")
 
 global window
 
