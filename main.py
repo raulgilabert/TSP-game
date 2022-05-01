@@ -164,7 +164,7 @@ class Window():
             self.distance = distance
     def write_info(self, winner):
         if winner == self.name.get():
-            texts.insert(END, "YOU WIN!"))
+            texts.insert(END, "YOU WIN!")
         else:
             texts.insert(END, "YOU LOSE")
 
