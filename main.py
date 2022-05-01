@@ -11,7 +11,7 @@ sio = socketio.Client()
 class Connection:
     def __init__ (self, name):
         self.name = name
-        sio.connect('http://localhost:3000')
+        sio.connect('http://192.168.1.17:3000')
 
     def start(self):
         sio.emit("newPlayer", self.name)
@@ -126,7 +126,7 @@ class Window():
         point_index = -1
 
         for i,c in enumerate(self.coords_points):
-            if event.x>c[0][0] and event.x<c[1][0] and event.y>c[0][1] and event.y<c[1][1]:
+            if event.xi>c[0][0] and event.x<c[1][0] and event.y>c[0][1] and event.y<c[1][1]:
                 point_index = i
                 break
         if point_index == -1:
@@ -145,7 +145,7 @@ class Window():
                 return
 
             last_center = self.obtain_center_index(self.clicked_points[-1])
-            actual_center = obtain_center(actual_point)
+            actual_ce nter = obtain_center(actual_point)
 
             self.create_line(actual_center, last_center)
         self.clicked_points.append(point_index)
@@ -162,6 +162,13 @@ class Window():
 
                 last_point = self.points[self.clicked_points[i]]
             self.distance = distance
+    def write_info(self, winner):
+        if winner == self.name.get():
+            texts.insert(END, "YOU WIN!"))
+        else:
+            texts.insert(END, "YOU LOSE")
+
+
 
 global window
 
@@ -177,6 +184,6 @@ def on_message(player1, player2, points):
 
 @sio.on("winner")
 def on_message(winner):
-    print(winner)
+    window.write_info(winner)
 
 window.start()
