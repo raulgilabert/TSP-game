@@ -284,5 +284,6 @@ def on_message():
 def on_message(data):
     window.clear_canvas()
     window.end(data)
+    c = None
 
 window.start()
