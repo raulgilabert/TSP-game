@@ -106,7 +106,21 @@ io.on("connection", (socket) => {
 
 	if (rooms[room].player1.ready && rooms[room].player2.ready) {
 	    let winner = ""
-	    if (rooms[room].player1.distance < rooms[room].player2.distance) {
+	    let tie = false
+	    if (rooms[room].player1.distance == rooms[room].player2.distance) {
+		tie = true
+		io.to(room).emit("tie")
+
+		setTimeout(2000)
+
+		++rooms[room].match
+
+		io.to(room).emit("start", rooms[room].player1.name, rooms[room].player2.name, generate_points(3 + rooms[room].match*2))
+		rooms[room].player1.ready = false
+		rooms[room].player2.ready = false
+
+	    }
+	    else if (rooms[room].player1.distance < rooms[room].player2.distance) {
 		winner = rooms[room].player1.name
 		++rooms[room].player1.points
 	    }
@@ -117,7 +131,9 @@ io.on("connection", (socket) => {
 
 	    console.log(winner)
 
-	    io.to(room).emit("winner", winner)
+	    if (! tie) {
+		io.to(room).emit("winner", winner)
+	    }
 	}
     })
 })

@@ -241,13 +241,17 @@ class Window():
 
         self.clear_canvas()
 
+        if winner == "tie":
+            self.texts.insert(END, "TIE +1 point")
+
+
         if winner == self.name.get():
-            self.texts.insert(END, "YOU WIN")
+            self.texts.insert(END, "YOU WIN +2 points")
 
             time.sleep(2)
             c.next()
         else:
-            self.texts.insert(END, "YOU LOSE")
+            self.texts.insert(END, "YOU LOSE +0 points")
 
 global window
 
@@ -261,6 +265,10 @@ def on_message(player1, player2, points):
 @sio.on("winner")
 def on_message(winner):
     window.info_winners(winner)
+
+@sio.on("tie")
+def on_message():
+    window.info_winners("tie")
 
 
 window.start()
