@@ -11,17 +11,16 @@ sio = socketio.Client()
 class Connection:
     def __init__ (self, name):
         self.name = name
-        sio.connect('http://192.168.1.17:3000')
+        sio.connect('http://localhost:3000')
 
     def start(self):
         sio.emit("newPlayer", self.name)
 
     def submit(self, dist):
-        sio.emit("ready", self.name, dist)
-
-global c
+        sio.emit("ready", [self.name, dist])
 
 def play(name):
+    global c
     c = Connection(name)
     c.start()
 
