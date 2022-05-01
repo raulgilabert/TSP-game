@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 import pygame
 import socketio
 import math
+import time
 
 global sio
 sio = socketio.Client()
@@ -18,6 +19,9 @@ class Connection:
 
     def submit(self, dist):
         sio.emit("ready", [self.name, dist])
+
+    def next(self):
+        sio.emit("next", self.name)
 
 def play(name):
     global c
@@ -230,5 +234,10 @@ def on_message(player1, player2, points):
 @sio.on("winner")
 def on_message(winner):
     window.info_winners(winner)
+    time.sleep(2)
+
+
+    c.next()
+
 
 window.start()

@@ -9,7 +9,7 @@ let rooms = {}
 
 function find_room(player) {
     for (let key in rooms) {
-	if (rooms[key].player1.name == player[0] || rooms[key].player2.name == player[0]) {
+	if (rooms[key].player1.name == player || rooms[key].player2.name == player) {
 	    return key.toString()
 	}
     }
@@ -78,27 +78,39 @@ io.on("connection", (socket) => {
 	}
     })
 
-    socket.on("ready", (name, distance) => {
-	let room = find_room(name)
+    socket.on("next", (data) => {
+	let player = data
 
-	if (rooms[room].player1.name == name) {
+	let room = find_room(player)
+
+	++rooms[room].match
+
+	io.to(room).emit("start", rooms[room].player1.name, rooms[room].player2.name, generate_points(3 + rooms[room].match))
+    })
+
+    socket.on("ready", (data) => {
+	let room = find_room(data[0])
+
+	if (rooms[room].player1.name == data[0]) {
 	    rooms[room].player1.ready = true
-	    rooms[room].player1.distance = distance
+	    rooms[room].player1.distance = data[1]
 	}
 	else {
 	    rooms[room].player2.ready = true
-	    rooms[room].player2.distance = distance
+	    rooms[room].player2.distance = data[1]
 	}
 
 	console.log(rooms)
 
 	if (rooms[room].player1.ready && rooms[room].player2.ready) {
 	    let winner = ""
-	    if (rooms[room].player1.distance > rooms[room].player2.distance) {
+	    if (rooms[room].player1.distance < rooms[room].player2.distance) {
 		winner = rooms[room].player1.name
+		++rooms[room].player1.points
 	    }
 	    else {
 		winner = rooms[room].player2.name
+		++rooms[room].player2.points
 	    }
 
 	    console.log(winner)
