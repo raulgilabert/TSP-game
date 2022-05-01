@@ -145,7 +145,7 @@ class Window():
                 return
 
             last_center = self.obtain_center_index(self.clicked_points[-1])
-            actual_ce nter = obtain_center(actual_point)
+            actual_center = obtain_center(actual_point)
 
             self.create_line(actual_center, last_center)
         self.clicked_points.append(point_index)
