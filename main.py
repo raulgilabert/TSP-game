@@ -166,9 +166,11 @@ class Window():
 
             distance = 0
 
+            print("----------------------------------")
+
             for i in self.clicked_points:
-                print(last_point, self.points[self.clicked_points[i]])
                 distance += math.sqrt((last_point[0] - self.points[self.clicked_points[i]][0])**2 + (last_point[1] - self.points[self.clicked_points[i]][1])**2)
+                print(distance)
 
                 last_point = self.points[self.clicked_points[i]]
             self.distance = distance
@@ -240,9 +242,6 @@ window = Window()
 
 @sio.on("start")
 def on_message(player1, player2, points):
-    print(player1, player2)
-    print(points)
-
     window.clear_canvas()
     window.render_points(points)
 
