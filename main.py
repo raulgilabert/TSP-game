@@ -126,7 +126,7 @@ class Window():
         point_index = -1
 
         for i,c in enumerate(self.coords_points):
-            if event.xi>c[0][0] and event.x<c[1][0] and event.y>c[0][1] and event.y<c[1][1]:
+            if event.x>c[0][0] and event.x<c[1][0] and event.y>c[0][1] and event.y<c[1][1]:
                 point_index = i
                 break
         if point_index == -1:
@@ -162,13 +162,11 @@ class Window():
 
                 last_point = self.points[self.clicked_points[i]]
             self.distance = distance
-    def write_info(self, winner):
+    def info_winners(self, winner):
         if winner == self.name.get():
-            texts.insert(END, "YOU WIN!")
+            texts.insert(END, "YOU WIN")
         else:
             texts.insert(END, "YOU LOSE")
-
-
 
 global window
 
@@ -184,6 +182,6 @@ def on_message(player1, player2, points):
 
 @sio.on("winner")
 def on_message(winner):
-    window.write_info(winner)
+    window.info_winners(winner)
 
 window.start()
