@@ -1,6 +1,6 @@
 import { Server } from "socket.io"
 
-const io = new Server(3000)
+const io = new Server(process.env.PORT || 3000)
 
 let players = 0
 let matches = 0

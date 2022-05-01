@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client';
 
-const socket = io("ws://localhost:3000");
+const socket = io("ws://hackupc2022.herokuapp.com:3000");
 
 let message = "newPlayer";
 let arg = "hola";
