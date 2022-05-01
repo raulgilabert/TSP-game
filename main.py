@@ -216,6 +216,10 @@ class Window():
     def info_winners(self, winner):
         if winner == self.name.get():
             self.texts.insert(END, "YOU WIN")
+
+            time.sleep(2)
+            c.next()
+            self.__init__()
         else:
             self.texts.insert(END, "YOU LOSE")
 
@@ -234,10 +238,6 @@ def on_message(player1, player2, points):
 @sio.on("winner")
 def on_message(winner):
     window.info_winners(winner)
-    time.sleep(2)
-
-
-    c.next()
 
 
 window.start()
