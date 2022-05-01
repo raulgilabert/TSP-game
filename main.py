@@ -214,12 +214,22 @@ class Window():
                 self.canvas.delete("border")
 
     def info_winners(self, winner):
+        self.coords_points = []
+        self.centers = []
+        self.clicked_points = []
+        self.line_id_list = []
+        self.points = []
+        self.distance = 0.0
+        self.first_point = None
+        self.redo_list = []
+
+        self.clear_canvas()
+
         if winner == self.name.get():
             self.texts.insert(END, "YOU WIN")
 
             time.sleep(2)
             c.next()
-            self.__init__()
         else:
             self.texts.insert(END, "YOU LOSE")
 
