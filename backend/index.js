@@ -85,7 +85,9 @@ io.on("connection", (socket) => {
 
 	++rooms[room].match
 
-	io.to(room).emit("start", rooms[room].player1.name, rooms[room].player2.name, generate_points(3 + rooms[room].match))
+	io.to(room).emit("start", rooms[room].player1.name, rooms[room].player2.name, generate_points(3 + rooms[room].match*2))
+	rooms[room].player1.ready = false
+	rooms[room].player2.ready = false
     })
 
     socket.on("ready", (data) => {

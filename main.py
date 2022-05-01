@@ -222,6 +222,7 @@ class Window():
         self.distance = 0.0
         self.first_point = None
         self.redo_list = []
+        self.distance = 0
 
         self.clear_canvas()
 
