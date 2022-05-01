@@ -128,6 +128,10 @@ class Window():
         for i in self.coords_points:
             self.centers.append(obtain_center(i))
 
+        for point in self.points:
+            point[0] = int(point[0]*1000)
+            point[1] = int(point[1]*1000)
+
     def link_points(self, event):
         point_index = -1
 
@@ -160,14 +164,20 @@ class Window():
             self.create_line(actual_center, last_center)
         self.clicked_points.append(point_index)
 
+        print(self.clicked_points)
+
         if (len(self.clicked_points) > len(self.points)):
             last_point = self.points[self.clicked_points[0]]
 
             distance = 0
 
             print("----------------------------------")
+            print(self.points)
+            print(self.clicked_points)
+
 
             for i in self.clicked_points:
+                print(last_point, self.clicked_points[i])
                 distance += math.sqrt((last_point[0] - self.points[self.clicked_points[i]][0])**2 + (last_point[1] - self.points[self.clicked_points[i]][1])**2)
                 print(last_point, self.points[self.clicked_points[i]])
                 print(distance)
