@@ -12,7 +12,7 @@ sio = socketio.Client()
 class Connection:
     def __init__ (self, name):
         self.name = name
-        sio.connect('https://hackupc2022.herokuapp.com:80')
+        sio.connect('https://hackupc2022.herokuapp.com:443')
 
     def start(self):
         sio.emit("newPlayer", self.name)
