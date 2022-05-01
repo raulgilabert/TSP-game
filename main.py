@@ -178,7 +178,9 @@ class Window():
 
             for i in self.clicked_points:
                 print(last_point, self.clicked_points[i])
-                distance += math.sqrt((last_point[0] - self.points[self.clicked_points[i]][0])**2 + (last_point[1] - self.points[self.clicked_points[i]][1])**2)
+                distance += int(math.sqrt((last_point[0] -
+                    self.points[self.clicked_points[i]][0])**2 + (last_point[1]
+                        - self.points[self.clicked_points[i]][1])**2))
                 print(last_point, self.points[self.clicked_points[i]])
                 print(distance)
 
