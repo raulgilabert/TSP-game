@@ -111,7 +111,9 @@ io.on("connection", (socket) => {
 		tie = true
 		io.to(room).emit("tie")
 
-		setTimeout(2000)
+		console.log("Pre timeout")
+
+		console.log("post timeout")
 
 		++rooms[room].match
 

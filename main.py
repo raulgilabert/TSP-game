@@ -248,7 +248,6 @@ class Window():
         elif winner == self.name.get():
             self.texts.insert(END, "YOU WIN +2 points")
 
-            time.sleep(2)
             c.next()
         else:
             self.texts.insert(END, "YOU LOSE +0 points")
