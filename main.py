@@ -43,6 +43,8 @@ class Window():
         self.line_id_list = []
         self.points = []
         self.distance = 0.0
+        self.first_point = None
+        self.redo_list = []
 
 
         for i in range(1, 8, 2):
@@ -57,16 +59,16 @@ class Window():
                 padx=57, command=lambda:play(self.name.get()))
         new_game_button.grid(row = 2, column = 0)
 
-        self.erase_button = Button(self.root, text="ERASE", cursor="hand2", padx=54)
+        self.erase_button = Button(self.root, text="ERASE", cursor="hand2", padx=54, command=self.erase)
         self.erase_button.grid(row=3, column=0)
 
         frame = Frame(self.root)
         frame.grid(row = 4, column = 0)
 
-        self.undo_button = Button(frame, text="UNDO", cursor="hand2", padx=20)
+        self.undo_button = Button(frame, text="UNDO", cursor="hand2", padx=20, command=self.undo)
         self.undo_button.pack(side=LEFT)
 
-        self.redo_button = Button(frame, text="REDO", cursor="hand2", padx=20)
+        self.redo_button = Button(frame, text="REDO", cursor="hand2", padx=20, command=self.redo)
         self.redo_button.pack(side=RIGHT)
 
         frame_texts = Frame(self.root, height=35, padx=10, pady=10)
@@ -131,11 +133,15 @@ class Window():
                 break
         if point_index == -1:
             return
+
         actual_point = self.coords_points[point_index]
+
+        self.redo_list.clear()
+        self.first_point = None
 
         if not self.clicked_points:
             self.canvas.create_oval(actual_point[0][0], actual_point[0][1], actual_point[1][0],
-                                    actual_point[1][1], width=3, outline="lime")
+                                    actual_point[1][1], width=3, outline="lime", tag="border")
         else:
             if point_index == self.clicked_points[0] and len(self.clicked_points) < len(self.coords_points):
                 return
@@ -162,6 +168,47 @@ class Window():
 
                 last_point = self.points[self.clicked_points[i]]
             self.distance = distance
+    def erase(self):
+        self.first_point = None
+        self.redo_list.clear()
+
+        if self.line_id_list:
+            for i in self.line_id_list:
+                self.canvas.delete(i)
+            self.clicked_points.clear()
+            self.line_id_list.clear()
+        self.canvas.delete("border")
+        self.clicked_points.clear()
+
+    def redo(self):
+        if self.first_point is not None:
+            self.clicked_points.append(self.first_point)
+            point1 = self.coords_points[self.first_point]
+            self.canvas.create_oval(point1[0][0], point1[0][1], point1[1][0], point1[1][1], width=3,
+                                    outline="lime", tag="border")
+            self.first_point = None
+        elif self.redo_list:
+            last_position = self.redo_list.pop()
+
+            center1 = self.obtain_center_index(last_position[0])
+            center2 = self.obtain_center_index(last_position[1])
+
+            self.clicked_points.append(last_position[0])
+            self.create_line(center1, center2)
+    def undo(self):
+            if self.line_id_list:
+                last_point = self.coords_points[self.clicked_points[-1]]
+                last2_point = self.coords_points[self.clicked_points[-2]]
+
+                last_center = obtain_center(last_point)
+                last2_center = obtain_center(last2_point)
+                self.redo_list.append((self.clicked_points[-1], self.clicked_points[-2]))
+                self.canvas.delete(self.line_id_list.pop())
+                self.clicked_points.pop()
+            elif len(self.clicked_points) == 1:
+                self.first_point = self.clicked_points.pop()
+                self.canvas.delete("border")
+
     def info_winners(self, winner):
         if winner == self.name.get():
             self.texts.insert(END, "YOU WIN")
