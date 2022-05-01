@@ -245,7 +245,7 @@ class Window():
             self.texts.insert(END, "TIE +1 point")
 
 
-        if winner == self.name.get():
+        elif winner == self.name.get():
             self.texts.insert(END, "YOU WIN +2 points")
 
             time.sleep(2)
