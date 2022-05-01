@@ -85,7 +85,7 @@ io.on("connection", (socket) => {
 
 	++rooms[room].match
 	
-	if (rooms[room].match == 7) {
+	if (rooms[room].match == 2) {
 	    io.to(room).emit("end", [[rooms[room].player1.name, rooms[room].player1.points], [rooms[room].player2.name, rooms[room].player2.points]])
 	    
 	    delete rooms[room]
@@ -124,7 +124,7 @@ io.on("connection", (socket) => {
 
 		++rooms[room].match
 
-		if (rooms[room].match == 7) {
+		if (rooms[room].match == 2) {
 		    io.to(room).emit("end", [[rooms[room].player1.name, rooms[room].player1.points], [rooms[room].player2.name, rooms[room].player2.points]])
 
 		    delete rooms[room]
