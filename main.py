@@ -262,6 +262,8 @@ class Window():
         else:
             self.texts.insert(END, data[1][0] + " WINS!")
 
+    def cleat_info(self):
+       self.texts.delete(0, END)
 
 global window
 
@@ -285,5 +287,6 @@ def on_message(data):
     window.clear_canvas()
     window.end(data)
     sio.disconnect()
+    window.clear_info()
 
 window.start()
