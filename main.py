@@ -1,7 +1,5 @@
 from tkinter import *
 from tkinter import messagebox
-from PIL import Image, ImageTk
-import pygame
 import socketio
 import math
 import time
@@ -35,7 +33,6 @@ def obtain_center(coords):
 class Window():
     def __init__(self):
         self.root = Tk()
-        pygame.mixer.init(44100)
         self.root.grid_columnconfigure(1, weight=1)
         self.root.grid_rowconfigure(2, weight=1)
         self.root.grid_rowconfigure(4, weight=1)
@@ -263,8 +260,7 @@ class Window():
             self.texts.insert(END, data[1][0] + " WINS!")
 
     def clear_info(self):
-       self.texts.delete(0, END)
-
+        pass
 global window
 
 window = Window()
