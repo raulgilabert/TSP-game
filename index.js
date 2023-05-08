@@ -19,11 +19,11 @@ function check_collision(points) {
     let last_point = points[points.length - 1]
 
     for (let i = 0; i < points.length - 1; ++i) {
-	let distance = Math.sqrt((last_point[0]-points[i][0])**2 + (last_point[1]-points[i][1])**2)
+			let distance = Math.sqrt((last_point[0]-points[i][0])**2 + (last_point[1]-points[i][1])**2)
 
-	if (distance < 0.1) {
-	    return true
-	}
+			if (distance < 0.1) {
+	    	return true
+			}
     }
 
     return false
